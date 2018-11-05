@@ -23,8 +23,6 @@ class EloCalculator:
 
         expected_result = self.calculate_win_expectency(diff_in_ratings)
 
-        print(expected_result)
-
         if(home_score > away_score):
             home_new_rating = self.calculate_new_rating(self.win_outcome, expected_result, k_value, home_orignal_rating)
             away_new_rating = self.calculate_new_rating(self.lose_outcome, expected_result, k_value, away_orignal_rating)

@@ -10,7 +10,6 @@ class Consumer:
 
     def message_callback(self, ch, method, properties, body):
         self.dispatcher.recieve_message(method.routing_key, body)
-        print(" [x] %r:%r" % (method.routing_key, body))
 
     def start_consumer(self):
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=MessagingConstants.HOST))
