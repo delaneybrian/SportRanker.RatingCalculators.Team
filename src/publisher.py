@@ -1,7 +1,11 @@
 import pika
 from Configuration.Constants import MessagingConstants
+from logger import Logger
 
 class Publisher:
+
+    def __init__(self):
+        self.logger = Logger()
 
     def publish(self, message, routing_key):
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=MessagingConstants.HOST))
@@ -14,5 +18,5 @@ class Publisher:
         channel.basic_publish(exchange='topic_logs',
                               routing_key=routing_key,
                               body=message)
-        print(" [x] Sent %r:%r" % (routing_key, message))
+        self.logger.log(" [x] Sent %r:%r" % (routing_key, message))
         connection.close()
