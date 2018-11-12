@@ -12,7 +12,11 @@ class Consumer:
         self.dispatcher.recieve_message(method.routing_key, body)
 
     def start_consumer(self):
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host=MessagingConstants.HOST))
+
+        params = pika.URLParameters(MessagingConstants.CLOUD_AMPQ_URL)
+        params.socket_timeout = 5
+
+        connection = pika.BlockingConnection(params)
         channel = connection.channel()
 
         channel.exchange_declare(exchange=MessagingConstants.NEW_FIXTURE_EXCHANGE,

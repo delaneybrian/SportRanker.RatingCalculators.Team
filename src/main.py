@@ -5,7 +5,6 @@ consumer = Consumer()
 
 consumer.start_consumer()
 
-print("Done")
 """
 elo_calculator = EloCalculator()
 
