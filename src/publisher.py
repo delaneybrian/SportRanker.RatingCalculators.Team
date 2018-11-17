@@ -8,15 +8,20 @@ class Publisher:
         self.logger = Logger()
 
     def publish(self, message, routing_key):
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host=MessagingConstants.HOST))
+
+        params = pika.URLParameters(MessagingConstants.CLOUD_AMPQ_URL)
+        params.socket_timeout = 5
+
+        connection = pika.BlockingConnection(params)
 
         channel = connection.channel()
 
-        channel.exchange_declare(exchange=MessagingConstants.NEW_FIXTURE_EXCHANGE,
+        channel.exchange_declare(exchange=MessagingConstants.RATING_CHANGE_EXCHANGE,
                                  exchange_type='topic')
 
-        channel.basic_publish(exchange='topic_logs',
+        channel.basic_publish(exchange=MessagingConstants.RATING_CHANGE_EXCHANGE,
                               routing_key=routing_key,
                               body=message)
+
         self.logger.log(" [x] Sent %r:%r" % (routing_key, message))
         connection.close()

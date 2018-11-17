@@ -61,6 +61,8 @@ class MessagingConstants:
     NHL = 'nhl'
     MLB = 'mlb'
 
+
+
     RATING_CHANGE_EXCHANGE = 'rating_change_exchange'
     TEAM_RATING_CHANGE = 'ratings.team'
     LOCATION_RATING_CHANGE = 'ratings.location'

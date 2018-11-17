@@ -3,6 +3,9 @@ from logger import Logger
 from Configuration.Constants import MessagingConstants
 from Configuration.Constants import ResultConstants
 from Configuration.Constants import DataConstants
+from Configuration.Constants import RankingChangeConstants
+from Configuration.Constants import SportId
+from Configuration.Constants import RankingChangeType
 from data_provider import DataProvider
 from publisher import Publisher
 import json
@@ -42,6 +45,28 @@ class MlbFixtureResultHandler:
         home_new_rating, away_new_rating = self.elo_calculator.calculate_new_ratings(MessagingConstants.MLB,
                                                  home_team_rating, away_team_rating, home_team_score, away_team_score)
 
-        rating_change_message = "test_message"
+        home_rating_change_message = {
+            RankingChangeConstants.SPORT_ID: SportId.MLB,
+            RankingChangeConstants.TEAM_ID: home_team_id,
+            RankingChangeConstants.RANKING: home_new_rating,
+            RankingChangeConstants.RANKING_CHANGE_TYPE: RankingChangeType.TEAM
+        }
 
-        self.publisher.publish(rating_change_message, MessagingConstants.TEAM_RATING_CHANGE)
+        home_ranking_json = json.dumps(home_rating_change_message)
+
+        self.logger.log(home_ranking_json)
+
+        away_rating_change_message = {
+            RankingChangeConstants.SPORT_ID: SportId.MLB,
+            RankingChangeConstants.TEAM_ID: away_team_id,
+            RankingChangeConstants.RANKING: away_new_rating,
+            RankingChangeConstants.RANKING_CHANGE_TYPE: RankingChangeType.TEAM
+        }
+
+        away_ranking_json = json.dumps(away_rating_change_message)
+
+        self.logger.log(away_ranking_json)
+
+        self.publisher.publish(home_ranking_json, MessagingConstants.TEAM_RATING_CHANGE)
+
+        self.publisher.publish(away_ranking_json, MessagingConstants.TEAM_RATING_CHANGE)
