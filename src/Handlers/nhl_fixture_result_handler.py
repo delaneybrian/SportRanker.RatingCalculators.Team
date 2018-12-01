@@ -19,7 +19,7 @@ class NhlFixtureResultHandler:
         self.publisher = Publisher()
 
     def handle(self, message):
-        self.logger.log("NHL handler fixture result recieved")
+        self.logger.info_log("NHL handler fixture result recieved")
 
         message = message.decode(MessagingConstants.ENCODING)
 
@@ -54,8 +54,6 @@ class NhlFixtureResultHandler:
 
         home_ranking_json = json.dumps(home_rating_change_message)
 
-        self.logger.log(home_ranking_json)
-
         away_rating_change_message = {
             RankingChangeConstants.SPORT_ID: SportId.NHL,
             RankingChangeConstants.TEAM_ID: away_team_id,
@@ -64,8 +62,6 @@ class NhlFixtureResultHandler:
         }
 
         away_ranking_json = json.dumps(away_rating_change_message)
-
-        self.logger.log(away_ranking_json)
 
         self.publisher.publish(home_ranking_json, MessagingConstants.TEAM_RATING_CHANGE)
 

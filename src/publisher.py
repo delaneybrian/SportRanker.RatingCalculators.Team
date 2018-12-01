@@ -23,5 +23,5 @@ class Publisher:
                               routing_key=routing_key,
                               body=message)
 
-        self.logger.log(" [x] Sent %r:%r" % (routing_key, message))
+        self.logger.info_log(" [x] Sent %r:%r" % (routing_key, message))
         connection.close()

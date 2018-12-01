@@ -32,7 +32,7 @@ class Dispatcher:
                   and split_routing_key[1] == MessagingConstants.MLB):
                 self.mlb_handler.handle(body)
             else:
-                self.logger.log("No handler found for message")
+                self.logger.warning_log("No handler found for message")
         else:
-            self.logger.log("Invalid message recived")
+            self.logger.warning_log("Invalid message recived")
 

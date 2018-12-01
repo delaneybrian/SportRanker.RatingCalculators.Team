@@ -1,16 +1,12 @@
 from consumer import Consumer
+from logger import Logger
 
 consumer = Consumer()
+logger = Logger()
 
-consumer.start_consumer()
-
-"""
-elo_calculator = EloCalculator()
-
-home_rating, away_rating = elo_calculator.calculate_new_ratings("nhl", 1500, 1500, 00, 00)
-
-print("Home Rating:")
-print(home_rating)
-print("Away Rating:")
-print(away_rating)
-"""
+while(True):
+    try:
+        logger.info_log("Starting Message Consumer..")
+        consumer.start_consumer()
+    except:
+        logger.warning_log("Error Running Consumer. Restarting...")
