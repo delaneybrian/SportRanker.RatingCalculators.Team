@@ -9,6 +9,10 @@ class Publisher:
 
     def publish(self, message, routing_key):
 
+        print("*************************")
+        print(message)
+        print("*************************")
+
         params = pika.URLParameters(MessagingConstants.CLOUD_AMPQ_URL)
         params.socket_timeout = 5
 

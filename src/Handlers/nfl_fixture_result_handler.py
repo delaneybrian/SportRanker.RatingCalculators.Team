@@ -25,44 +25,44 @@ class NflFixtureResultHandler:
 
         message_dict = json.loads(message)
 
-        feed_source_id = message_dict[ResultConstants.FEED_SOURCE]
+        home_team_id = message_dict[ResultConstants.HOME_TEAM_ID]
+        away_team_id = message_dict[ResultConstants.AWAY_TEAM_ID]
 
-        home_team_feed_id = message_dict[ResultConstants.HOME_TEAM_ID]
-        away_team_feed_id = message_dict[ResultConstants.AWAY_TEAM_ID]
+        home_team_details = self.data_provider.get_team_details_by_id(home_team_id)
+        away_team_details = self.data_provider.get_team_details_by_id(away_team_id)
 
-        home_team_details = self.data_provider.get_team_details_by_feed_id(feed_source_id, home_team_feed_id)
-        away_team_details = self.data_provider.get_team_details_by_feed_id(feed_source_id, away_team_feed_id)
+        if(home_team_details != None
+           and away_team_details != None):
 
-        home_team_id = home_team_details[DataConstants.TEAM_ID]
-        home_team_rating = away_team_details[DataConstants.RATING]
+            home_team_rating = home_team_details[DataConstants.RATING]
+            away_team_rating = away_team_details[DataConstants.RATING]
 
-        away_team_id = home_team_details[DataConstants.TEAM_ID]
-        away_team_rating = away_team_details[DataConstants.RATING]
+            home_team_score = message_dict[ResultConstants.HOME_TEAM_SCORE]
+            away_team_score = message_dict[ResultConstants.AWAY_TEAM_SCORE]
 
-        home_team_score = message_dict[ResultConstants.HOME_TEAM_SCORE]
-        away_team_score = message_dict[ResultConstants.AWAY_TEAM_SCORE]
+            home_new_rating, away_new_rating = self.elo_calculator.calculate_new_ratings(MessagingConstants.NFL,
+                                                     home_team_rating, away_team_rating, home_team_score, away_team_score)
 
-        home_new_rating, away_new_rating = self.elo_calculator.calculate_new_ratings(MessagingConstants.NFL,
-                                                 home_team_rating, away_team_rating, home_team_score, away_team_score)
+            home_rating_change_message = {
+                RankingChangeConstants.SPORT_ID: SportId.NBA,
+                RankingChangeConstants.TEAM_ID: home_team_id,
+                RankingChangeConstants.RANKING: home_new_rating,
+                RankingChangeConstants.RANKING_CHANGE_TYPE: RankingChangeType.TEAM
+            }
 
-        home_rating_change_message = {
-            RankingChangeConstants.SPORT_ID: SportId.NBA,
-            RankingChangeConstants.TEAM_ID: home_team_id,
-            RankingChangeConstants.RANKING: home_new_rating,
-            RankingChangeConstants.RANKING_CHANGE_TYPE: RankingChangeType.TEAM
-        }
+            home_ranking_json = json.dumps(home_rating_change_message)
 
-        home_ranking_json = json.dumps(home_rating_change_message)
+            away_rating_change_message = {
+                RankingChangeConstants.SPORT_ID: SportId.NBA,
+                RankingChangeConstants.TEAM_ID: away_team_id,
+                RankingChangeConstants.RANKING: away_new_rating,
+                RankingChangeConstants.RANKING_CHANGE_TYPE: RankingChangeType.TEAM
+            }
 
-        away_rating_change_message = {
-            RankingChangeConstants.SPORT_ID: SportId.NBA,
-            RankingChangeConstants.TEAM_ID: away_team_id,
-            RankingChangeConstants.RANKING: away_new_rating,
-            RankingChangeConstants.RANKING_CHANGE_TYPE: RankingChangeType.TEAM
-        }
+            away_ranking_json = json.dumps(away_rating_change_message)
 
-        away_ranking_json = json.dumps(away_rating_change_message)
+            self.publisher.publish(home_ranking_json, MessagingConstants.TEAM_RATING_CHANGE)
 
-        self.publisher.publish(home_ranking_json, MessagingConstants.TEAM_RATING_CHANGE)
-
-        self.publisher.publish(away_ranking_json, MessagingConstants.TEAM_RATING_CHANGE)
+            self.publisher.publish(away_ranking_json, MessagingConstants.TEAM_RATING_CHANGE)
+        else:
+            self.logger.info_log("Cannot Publish NFL Rating Change Message As Team Is Null")
