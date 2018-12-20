@@ -1,8 +1,8 @@
 
 class RankingChangeType:
-    UNSET = 0,
-    TEAM = 1,
-    STATE = 2,
+    UNSET = 0
+    TEAM = 1
+    STATE = 2
     CITY = 3
 
 class DataConstants:
@@ -10,16 +10,16 @@ class DataConstants:
     RATING = 'rating'
 
 class SportId:
-    UNSET = 0,
-    NBA = 1,
-    NFL = 2,
-    NHL = 3,
-    MLB = 4,
+    UNSET = 0
+    NBA = 1
+    NFL = 2
+    NHL = 3
+    MLB = 4
     NASCAR = 5
 
 class SourceId:
-    UNSET = 0,
-    SPORT_RADAR = 1,
+    UNSET = 0
+    SPORT_RADAR = 1
     INTERNAL = 2
 
 class ResultConstants:
