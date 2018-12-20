@@ -44,7 +44,7 @@ class NhlFixtureResultHandler:
                                                      home_team_rating, away_team_rating, home_team_score, away_team_score)
 
             home_rating_change_message = {
-                RankingChangeConstants.SPORT_ID: SportId.NHL,
+                #RankingChangeConstants.SPORT_ID: SportId.NHL,
                 RankingChangeConstants.TEAM_ID: home_team_id,
                 RankingChangeConstants.RANKING: home_new_rating,
                 RankingChangeConstants.RANKING_CHANGE_TYPE: RankingChangeType.TEAM
@@ -53,7 +53,7 @@ class NhlFixtureResultHandler:
             home_ranking_json = json.dumps(home_rating_change_message)
 
             away_rating_change_message = {
-                RankingChangeConstants.SPORT_ID: SportId.NHL,
+                #RankingChangeConstants.SPORT_ID: SportId.NHL,
                 RankingChangeConstants.TEAM_ID: away_team_id,
                 RankingChangeConstants.RANKING: away_new_rating,
                 RankingChangeConstants.RANKING_CHANGE_TYPE: RankingChangeType.TEAM

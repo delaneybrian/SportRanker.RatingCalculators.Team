@@ -37,7 +37,7 @@ class ResultConstants:
 
 class RankingChangeConstants:
     SPORT_ID = 'SportId'
-    TEAM_ID = 'TeamId'
+    TEAM_ID = 'Id'
     RANKING = 'Ranking'
     RANKING_CHANGE_TYPE = 'RankingChangeType'
 
