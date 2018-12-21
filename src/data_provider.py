@@ -9,7 +9,7 @@ class DataProvider:
 
     def get_team_details_by_id(self, team_id):
 
-        url = "https://sports-rivals.appspot.com/api/teams/" + team_id
+        url = "https://sportsrivals.cronelea.ie/sportsrivals-data-service/api/teams/" + team_id
 
         result = requests.get(url)
 

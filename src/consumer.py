@@ -14,15 +14,15 @@ class Consumer:
     def start_consumer(self):
 
         params = pika.URLParameters(MessagingConstants.CLOUD_AMPQ_URL)
-        params.socket_timeout = 5
+        params.socket_timeout = 20
 
         connection = pika.BlockingConnection(params)
         channel = connection.channel()
 
-        channel.exchange_declare(exchange=MessagingConstants.NEW_FIXTURE_EXCHANGE,
+        channel.exchange_declare(exchange=MessagingConstants.NEW_FIXTURE_EXCHANGE, durable=True,
                                  exchange_type='topic')
 
-        result = channel.queue_declare(exclusive=True)
+        result = channel.queue_declare(queue='ratings-processor-team', durable=True)
         queue_name = result.method.queue
 
 
