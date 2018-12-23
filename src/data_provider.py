@@ -1,6 +1,7 @@
 import requests
 from logger import Logger
 import json
+import urllib3
 
 class DataProvider:
 
@@ -11,15 +12,27 @@ class DataProvider:
 
         url = "https://sportsrivals.cronelea.ie/sportsrivals-data-service/api/teams/" + team_id
 
-        result = requests.get(url)
+        try:
+            result = requests.get(url)
 
-        if(result.status_code == 200):
+            if (result.status_code == 200):
 
-            team_dict = json.loads(result.text)
+                team_dict = json.loads(result.text)
 
-            teamId = team_dict["id"]
-            rating = team_dict["rating"]
+                teamId = team_dict["id"]
+                rating = team_dict["rating"]
 
-            return {"teamId": teamId, "rating": rating}
-        else:
-            self.logger.info_log("Error Getting Team From Api Id: " + team_id)
+                return {"teamId": teamId, "rating": rating}
+            else:
+                self.logger.info_log("Error Getting Team From Api Id: " + team_id)
+        except TimeoutError:
+            self.logger.info_log("REST request has timed out")
+        except urllib3.exceptions.NewConnectionError:
+            self.logger.info_log("REST new connection error")
+        except urllib3.exceptions.MaxRetryError:
+            self.logger.info_log("REST max retry error")
+        except requests.exceptions.ConnectionError:
+            self.logger.info_log("REST connection error")
+        except:
+            self.logger.info_log("REST error")
+

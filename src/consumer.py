@@ -1,15 +1,19 @@
 import pika
-
 from Configuration.Constants import MessagingConstants
 from dispatcher import Dispatcher
+from logger import Logger
 
 class Consumer:
 
     def __init__(self):
         self.dispatcher = Dispatcher()
+        self.logger = Logger()
 
     def message_callback(self, ch, method, properties, body):
-        self.dispatcher.recieve_message(method.routing_key, body)
+        try:
+            self.dispatcher.recieve_message(method.routing_key, body)
+        except:
+            self.logger.info_log("Exception thrown dispatching message")
 
     def start_consumer(self):
 
